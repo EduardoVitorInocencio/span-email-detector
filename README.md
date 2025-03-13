@@ -7,7 +7,7 @@ A Regressão Logística é um algoritmo de aprendizado de máquina amplamente ut
 
 A regressão logística utiliza uma função logística (também conhecida como função sigmoide) para mapear qualquer valor de entrada em um valor entre 0 e 1, que pode ser interpretado como uma probabilidade. A fórmula da função sigmoide é:
 
-![alt text](image-1.png)
+![alt text](images/image-1.png)
 
 
 #### Aplicações:
@@ -56,7 +56,7 @@ O gráfico da função sigmoide é uma representação visual fundamental para e
 ### Exemplo de Gráfico:
 Abaixo está um exemplo de como o gráfico da função sigmoide pode ser visualizado:
 
-![alt text](image-2.png)
+![alt text](images/image-2.png)
 
 Este código implementa um modelo de Regressão Logística para classificar e-mails como spam ou não spam (ham) usando o dataset spambase.csv. Abaixo, detalhamos cada parte do código:
 
