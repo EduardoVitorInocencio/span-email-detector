@@ -9,7 +9,6 @@ A regressão logística utiliza uma função logística (também conhecida como 
 
 ![alt text](images/image-1.png)
 
-
 #### Aplicações:
 
 - Classificação binária (ex: prever se um e-mail é spam ou não).
@@ -186,6 +185,69 @@ O dataset spambase.csv contém 4601 instâncias e 58 colunas:
 - **spam:** 1 para spam, 0 para não spam.
 
 
-### Conclusão
 
-Este código é um exemplo completo de como implementar e avaliar um modelo de Regressão Logística para classificação binária. Ele cobre desde o carregamento dos dados até a avaliação do modelo, incluindo visualizações para facilitar a interpretação dos resultados. O uso de métricas como acurácia, precisão, recall e F1 score permite uma análise detalhada do desempenho do modelo.
+## API de Detecção de Spam
+
+Além de treinar o modelo de **Regressão Logística**, foi criada uma **API com FastAPI** para permitir a classificação de novos e-mails como spam ou não spam.
+
+### Como Usar a API
+
+A API foi desenvolvida com a funcionalidade de fazer previsões em tempo real. Você pode enviar uma lista de **57 features** (relacionadas ao conteúdo do e-mail) e receber uma resposta indicando se o e-mail é **spam** (1) ou **não spam** (0).
+
+### Código da API
+
+```python
+from fastapi import FastAPI
+from pydantic import BaseModel
+from typing import List
+import pickle
+import pandas as pd
+
+# Carregar o modelo treinado
+with open('spam_model.pkl', 'rb') as f:
+    model = pickle.load(f)
+
+feature_names = [...]  # Lista de nomes das features
+
+app = FastAPI()
+
+class SpamInput(BaseModel):
+    features: List[float]
+
+@app.post("/predict")
+def predict_spam(input_data: SpamInput):
+    if len(input_data.features) != 57:
+        return {"error": f"Esperado 57 valores, mas recebeu {len(input_data.features)}"}
+    
+    df = pd.DataFrame([input_data.features], columns=feature_names)
+    prediction = model.predict(df)[0]
+    return {"spam": bool(prediction)}
+```
+
+### Como Fazer uma Requisição
+
+Para testar a API, envie uma requisição **POST** para o endpoint `/predict` com o seguinte corpo de request:
+
+```json
+{
+    "features": [0.0, 0.1, 0.0, ..., 0.0]  # Lista de 57 valores representando as features
+}
+```
+
+A resposta será um objeto JSON indicando se o e-mail é **spam**:
+
+```json
+{
+    "spam": true
+}
+```
+
+---
+
+## Conclusão
+
+Esse projeto implementa uma solução completa de detecção de **spam** com **Machine Learning**. A utilização da **Regressão Logística** oferece uma abordagem eficiente e interpretável, enquanto a **API FastAPI** permite integrar facilmente a solução a outros sistemas.
+
+Se você deseja saber mais sobre como usar este modelo em sua própria aplicação, ou como treinar e implementar modelos de **Machine Learning** de maneira simples e escalável, entre em contato! 
+
+```
